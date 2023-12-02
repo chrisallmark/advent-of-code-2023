@@ -4,36 +4,44 @@ const loadInput = (filename: string) => {
   return readFileSync(`${__dirname}/${filename}`, "utf-8");
 };
 
-const digits = [
-  "zero",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-];
+const calculate = (value: string) =>
+  value.length === 0 ? 0 : Number.parseInt(value[0] + value[value.length - 1]);
 
-const crunchInput = (input: string) => {
-  const data = input.split("\n").reduce((total, value) => {
-    let code = "";
-    for (let i = 0; i < value.length; i++) {
-      if (/\d/.test(value[i])) {
-        code += value[i];
-      } else {
-        for (const digit of digits) {
-          if (value.slice(i).startsWith(digit)) {
-            code += digits.indexOf(digit);
-          }
-        }
+const partOne = (input: string) => {
+  return input.split("\n").reduce((total, value) => {
+    return total + calculate(value.replace(/\D/g, ""));
+  }, 0);
+};
+
+const partTwo = (input: string) => {
+  const words = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+  ];
+  return input.split("\n").reduce((total, value) => {
+    for (const word of words) {
+      const index = value.indexOf(word);
+      if (index >= 0) {
+        value = value.replace(
+          new RegExp(word, "g"),
+          `${word[0]}${words.indexOf(word)}${word.slice(2)}`
+        );
       }
     }
-    return total + Number.parseInt(code[0] + code[code.length - 1]);
+    return total + calculate(value.replace(/\D/g, ""));
   }, 0);
-  return data;
+};
+
+const crunchInput = (input: string) => {
+  return [partOne(input), partTwo(input)];
 };
 
 module.exports = {

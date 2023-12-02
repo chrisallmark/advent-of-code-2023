@@ -12,13 +12,13 @@ describe("Day 1", () => {
   });
 
   test("Crunch Input", () => {
-    expect(day.crunchInput(inputPart1)).toEqual(142);
-    expect(day.crunchInput(inputPart2)).toEqual(281);
+    expect(day.crunchInput(inputPart1)[0]).toEqual(142);
+    expect(day.crunchInput(inputPart2)[1]).toEqual(281);
   });
 
   test("Solve", () => {
-    expect(day.solve(inputPart1)).toEqual(142);
-    expect(day.solve(inputPart2)).toEqual(281);
+    expect(day.solve(inputPart1)[0]).toEqual(142);
+    expect(day.solve(inputPart2)[1]).toEqual(281);
   });
 });
 
