@@ -4,12 +4,15 @@ const loadInput = (filename: string) => {
   return readFileSync(`${__dirname}/${filename}`, "utf-8");
 };
 
-const calculate = (value: string) =>
-  value.length === 0 ? 0 : Number.parseInt(value[0] + value[value.length - 1]);
-
+const calculate = (value: string) => {
+  value = value.replace(/\D/g, "");
+  return value.length === 0
+    ? 0
+    : Number.parseInt(value[0] + value[value.length - 1]);
+};
 const partOne = (input: string) => {
   return input.split("\n").reduce((total, value) => {
-    return total + calculate(value.replace(/\D/g, ""));
+    return total + calculate(value);
   }, 0);
 };
 
@@ -36,7 +39,7 @@ const partTwo = (input: string) => {
         );
       }
     }
-    return total + calculate(value.replace(/\D/g, ""));
+    return total + calculate(value);
   }, 0);
 };
 
