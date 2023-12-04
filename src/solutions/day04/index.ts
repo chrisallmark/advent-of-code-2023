@@ -5,7 +5,24 @@ const loadInput = (filename: string) => {
 };
 
 const crunchInput = (input: string) => {
-  return [0, 0];
+  const lines = input.split("\n");
+  const copies = new Array(lines.length).fill(1);
+  const partOne = lines.reduce((total, line) => {
+    const match = line.match(/Card +(\d+): +(.*) +\| +(.*)/);
+    const game = Number.parseInt(match![1]);
+    const winners = match![2].split(/ +/);
+    const scratchcard = match![3].split(/ +/);
+    const matches = scratchcard.filter((value) => winners.includes(value));
+    // partOne
+    total += matches.reduce((score) => (score === 0 ? 1 : score + score), 0);
+    // partTwo
+    for (let i = 0; i < matches.length; i++) {
+      copies[game + i] += copies[game - 1];
+    }
+    return total;
+  }, 0);
+  const partTwo = copies.reduce((sum, value) => (sum += value), 0);
+  return [partOne, partTwo];
 };
 
 module.exports = {
