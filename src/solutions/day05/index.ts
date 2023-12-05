@@ -6,21 +6,19 @@ const loadInput = (filename: string) => {
   return readFileSync(`${__dirname}/${filename}`, "utf-8");
 };
 
-interface Mapper {
-  [key: string]: any;
-  soil(n: number): number;
-  fertilizer(n: number): number;
-  water(n: number): number;
-  light(n: number): number;
-  temperature(n: number): number;
-  humidity(n: number): number;
-  location(n: number): number;
-}
-
 const crunchInput = (input: string) => {
-  let seeds: Array<number> = [];
+  interface Mapper {
+    [key: string]: any;
+    soil(n: number, r?: boolean): number;
+    fertilizer(n: number, r?: boolean): number;
+    water(n: number, r?: boolean): number;
+    light(n: number, r?: boolean): number;
+    temperature(n: number, r?: boolean): number;
+    humidity(n: number, r?: boolean): number;
+    location(n: number, r?: boolean): number;
+  }
   let mapper: Mapper = {
-    soil: (n: number) => n, // return fertilizer
+    soil: (n: number) => n,
     fertilizer: (n: number) => n,
     water: (n: number) => n,
     light: (n: number) => n,
@@ -28,15 +26,7 @@ const crunchInput = (input: string) => {
     humidity: (n: number) => n,
     location: (n: number) => n,
   };
-  let reverseMapper: Mapper = {
-    soil: (n: number) => n,
-    fertilizer: (n: number) => n,
-    water: (n: number) => n,
-    light: (n: number) => n,
-    temperature: (n: number) => n,
-    humidity: (n: number) => n,
-    location: (n: number) => n, // returns humidity
-  };
+  let seeds: Array<number> = [];
   input.split("\n\n").forEach((group, index) => {
     if (index === 0) {
       seeds = group
@@ -57,20 +47,17 @@ const crunchInput = (input: string) => {
           };
           return result;
         });
-      mapper[type] = (n: number) => {
+      mapper[type] = (n: number, r: boolean = false) => {
         let result = n;
         map.forEach((item) => {
-          if (n >= item.src && n < item.src + item.len) {
-            result = item.dst + (n - item.src);
-          }
-        });
-        return result;
-      };
-      reverseMapper[type] = (n: number) => {
-        let result = n;
-        map.forEach((item) => {
-          if (n >= item.dst && n < item.dst + item.len) {
-            result = item.src + (n - item.dst);
+          if (r) {
+            if (n >= item.dst && n < item.dst + item.len) {
+              result = item.src + (n - item.dst);
+            }
+          } else {
+            if (n >= item.src && n < item.src + item.len) {
+              result = item.dst + (n - item.src);
+            }
           }
         });
         return result;
@@ -91,13 +78,13 @@ const crunchInput = (input: string) => {
   let location = 0;
   let partTwo = 0;
   while (partTwo === 0) {
-    const humidity = reverseMapper.location(location);
-    const temperature = reverseMapper.humidity(humidity);
-    const light = reverseMapper.temperature(temperature);
-    const water = reverseMapper.light(light);
-    const fertilizer = reverseMapper.water(water);
-    const soil = reverseMapper.fertilizer(fertilizer);
-    const seed = reverseMapper.soil(soil);
+    const humidity = mapper.location(location, true);
+    const temperature = mapper.humidity(humidity, true);
+    const light = mapper.temperature(temperature, true);
+    const water = mapper.light(light, true);
+    const fertilizer = mapper.water(water, true);
+    const soil = mapper.fertilizer(fertilizer, true);
+    const seed = mapper.soil(soil, true);
     for (let i = 0; i < seeds.length; i += 2) {
       if (seed >= seeds[i] && seed < seeds[i] + seeds[i + 1]) {
         partTwo = location;
