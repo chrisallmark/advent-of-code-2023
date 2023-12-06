@@ -10,6 +10,7 @@ const calculate = (value: string) => {
     ? 0
     : Number.parseInt(value[0] + value[value.length - 1]);
 };
+
 const partOne = (input: string) => {
   return input.split("\n").reduce((total, value) => {
     return total + calculate(value);
