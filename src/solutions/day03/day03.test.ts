@@ -2,7 +2,7 @@ const day = require("./index.ts");
 
 const input = day.loadInput("day03.txt");
 
-describe("Day 1", () => {
+describe("Day 3", () => {
   test("Load Input", () => {
     expect(input).toEqual(
       "467..114..\n...*......\n..35..633.\n......#...\n617*......\n.....+.58.\n..592.....\n......755.\n...$.*....\n.664.598.."

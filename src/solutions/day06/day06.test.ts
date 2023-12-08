@@ -2,7 +2,7 @@ const day = require("./index.ts");
 
 const input = day.loadInput("day06.txt");
 
-describe("Day 1", () => {
+describe("Day 6", () => {
   test("Load Input", () => {
     expect(input).toEqual("Time:      7  15   30\nDistance:  9  40  200");
   });
