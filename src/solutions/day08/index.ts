@@ -12,42 +12,28 @@ const partOne = (instructions: Array<string>, map: Map) => {
   let instruction = 0;
   let steps = 0;
   while (location !== "ZZZ") {
-    if (instructions[instruction] === "L") {
-      location = map[location].L;
-    }
-    if (instructions[instruction] === "R") {
-      location = map[location].R;
-    }
-    instruction++;
-    if (instruction === instructions.length) {
-      instruction = 0;
-    }
+    location = map[location][instructions[instruction]];
+    instruction = instruction === instructions.length - 1 ? 0 : instruction + 1;
     steps++;
   }
   return steps;
 };
 
+const gcd = (x: number, y: number): number => (y === 0 ? x : gcd(y, x % y));
+const lcm = (...n: Array<number>) => n.reduce((x, y) => (x * y) / gcd(x, y));
+
 const partTwo = (instructions: Array<string>, map: Map) => {
   if (instructions.length === 2 && !map["XXX"]) {
     return 0;
   }
-  const gcd = (x: number, y: number): number => (y === 0 ? x : gcd(y, x % y));
-  const lcm = (...n: Array<number>) => n.reduce((x, y) => (x * y) / gcd(x, y));
   const locations = Object.keys(map).filter((key) => key.endsWith("A"));
   const steps = locations.map((location, index) => {
     let instruction = 0;
     let steps = 0;
     while (!location.endsWith("Z")) {
-      if (instructions[instruction] === "L") {
-        location = map[location].L;
-      }
-      if (instructions[instruction] === "R") {
-        location = map[location].R;
-      }
-      instruction++;
-      if (instruction === instructions.length) {
-        instruction = 0;
-      }
+      location = map[location][instructions[instruction]];
+      instruction =
+        instruction === instructions.length - 1 ? 0 : instruction + 1;
       steps++;
     }
     return steps;
